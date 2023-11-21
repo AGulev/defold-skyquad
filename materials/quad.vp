@@ -6,7 +6,7 @@ float fovy = 0.7854;
 float aspect = 1.5;
 
 #if __VERSION__ < 200
-mat4 transpose(mat4 m)
+mat4 my_transpose(mat4 m)
 {
     vec4 i0 = m[0];
     vec4 i1 = m[1];
@@ -29,7 +29,11 @@ void main()
     vec2 tex = position.xy * 0.5 + 0.5;
     float d = 0.5 / tan(fovy/2.0);
     vec4 ray = vec4((tex.x - 0.5) * aspect, tex.y - 0.5, -d, 0);
+#if __VERSION__ < 200
+    var_ray = (my_transpose(mtx_view) * ray).xyz;
+#else
     var_ray = (transpose(mtx_view) * ray).xyz;
+#endif
     gl_Position = position;
 
 }
